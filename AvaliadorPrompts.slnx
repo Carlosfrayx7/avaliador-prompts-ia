@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/PromptEval.Cli/PromptEval.Cli.csproj" />
+    <Project Path="src/PromptEval.Core/PromptEval.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PromptEval.Core.Tests/PromptEval.Core.Tests.csproj" />
+  </Folder>
+</Solution>
