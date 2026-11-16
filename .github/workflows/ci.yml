@@ -1,0 +1,23 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - run: dotnet restore AvaliadorPrompts.slnx
+      - run: dotnet build AvaliadorPrompts.slnx --no-restore -c Release
+      - run: dotnet test AvaliadorPrompts.slnx --no-build -c Release --verbosity normal
+      # O prompt em uso (v2) não pode ter regredido em relação à versão anterior.
+      - name: Regression gate
+        run: dotnet run --project src/PromptEval.Cli -c Release --no-build -- gate --baseline v1-basico__haiku --candidate v2-regras__haiku
+      - name: Site data is up to date
+        run: |
+          dotnet run --project src/PromptEval.Cli -c Release --no-build -- site
+          git diff --exit-code -- site/data.json
